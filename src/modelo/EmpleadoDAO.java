@@ -111,24 +111,17 @@ public class EmpleadoDAO {
     }
     public List<StringBuilder> obtenerInformes(){
         List<StringBuilder> informes = new ArrayList<>();
-        String sql = "SELECT * FROM empleados INNER JOIN incidencias ON incidencias.id_empleado = empleados.id";// gotta change this probably
+        String sql = "SELECT nombre,COUNT(estado) AS 'CountEstado',estado,AVG(fecha_resolucion-fecha_creacion) AS 'DiasAVG' FROM empleados INNER JOIN incidencias ON incidencias.id_empleado = empleados.id GROUP BY estado ORDER BY nombre;";// gotta change this probably
         try(PreparedStatement ps = conexion.prepareStatement(sql);
             ResultSet rs = ps.executeQuery()){
                 while(rs.next()){
                     StringBuilder sb = new StringBuilder();
-                    sb.append(Integer.toString(rs.getInt("empleados.id"))).append(" ");
-                    sb.append(rs.getString("nombre")).append(" ");
-                    sb.append(rs.getString("email")).append(" ");
-                    sb.append(Integer.toString(rs.getInt("incidencias.id"))).append(" ");
-                    sb.append(rs.getString("descripcion")).append(" ");
-                    sb.append(rs.getString("prioridad")).append(" ");
-                    sb.append(rs.getString("estado")).append(" ");
-                    sb.append(rs.getDate("fecha_creacion").toString()).append(" ");
-                    try{
-                        sb.append(rs.getDate("fecha_resolucion").toString());
-                    }catch(NullPointerException e){
-                        sb.append("null");
-                    }
+                    sb.append(rs.getString("nombre")).append(" | ");
+                    sb.append("Incidencias ");
+                    sb.append(rs.getString("estado")).append(": ");
+                    sb.append(rs.getString("CountEstado")).append(" | ");
+                    sb.append("Tiempo promedio de resolucion: ");
+                    sb.append(rs.getString("DiasAVG")).append(" dias");
                     informes.add(sb);
                 }
         }catch(SQLException e){

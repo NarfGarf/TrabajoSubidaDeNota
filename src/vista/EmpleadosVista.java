@@ -86,7 +86,16 @@ public class EmpleadosVista {
             }
             return false;
     }
-    
+    public void mostrarInformes(List<StringBuilder>informes){
+        System.out.println("---INFORME GENERAL DE EMPLEADOS---");
+        if(informes.isEmpty()){
+            System.out.println("No hay empleados registrados");
+        }else{
+            for(StringBuilder sb : informes){
+                System.out.println(sb);
+            }
+        }
+    }
     public void mostrarMensaje(String mensaje){
         System.out.println(mensaje);
     }
